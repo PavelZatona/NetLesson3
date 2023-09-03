@@ -1,5 +1,6 @@
 ﻿using ObjectsHierarchies.Abstractions;
 using ObjectsHierarchies.Implementations;
+using System.Data;
 
 namespace ObjectsHierarchies
 {
@@ -7,7 +8,7 @@ namespace ObjectsHierarchies
     {
         public static void Main(string[] args)
         {
-            ICar trolleybus = new Trolleybus("PG1234", 220);
+           /* ICar trolleybus = new Trolleybus("PG1234", 220);
 
             trolleybus.StartEngline();
             trolleybus.CarryPeople(4, "Тиват");
@@ -30,6 +31,7 @@ namespace ObjectsHierarchies
                 trolleybusAsTruck.Load(5);
                 trolleybusAsTruck.Unload();
             }
+            
 
             // Пытаемся возить грузы на грузовике
             if (truck is ITruck)
@@ -42,8 +44,64 @@ namespace ObjectsHierarchies
             }
 
             trolleybus.Crash(truck);
+*/
+
+            IGuns pistol = new Pistol("TT", 7);
+            IGuns rocketLauncher = new RocketLauncher("RocketLauncher", 4);
+
+            ShowWeaponSummary(pistol);
+            ShowWeaponSummary(rocketLauncher);
+
+            //pistol.GunChangeGun(rocketLauncher);
 
             Console.ReadLine();
+        }
+
+        private static void ShowWeaponSummary(IGuns gun)
+        {
+            Console.WriteLine("----------------------------------------------------------------------------------------");
+            Console.WriteLine($"Количество зарядов: {gun.AmmoCapacity()}"); ;
+            gun.GunReload();
+            gun.GunTakeAim();
+            gun.GunShoot();
+            Console.WriteLine("----------------------------------------------------------------------------------------");
+
+            DoLightWeaponActions(gun);
+            DoHeavyWeaponActions(gun);
+        }
+
+        private static void DoLightWeaponActions(IGuns gun)
+        {
+            Console.WriteLine("----------------------------------------------------------------------------------------");
+
+            if (!(gun is ILightWeapon))
+            {
+                Console.WriteLine($"Оружие {gun.GetWeaponName()} не является лёгким.");
+                return;
+            }
+
+            ILightWeapon lightWeapon = gun as ILightWeapon;
+            lightWeapon.GunOverheated();
+            lightWeapon.GunJammed();
+            lightWeapon.GunRepaired();
+
+            Console.WriteLine("----------------------------------------------------------------------------------------");
+        }
+
+        private static void DoHeavyWeaponActions(IGuns gun)
+        {
+            Console.WriteLine("----------------------------------------------------------------------------------------");
+
+            if (!(gun is IHeavyWeapon))
+            {
+                Console.WriteLine($"Оружие {gun.GetWeaponName()} не является тяжёлым.");
+                return;
+            }
+
+            IHeavyWeapon heavyWeapon = gun as IHeavyWeapon;
+            heavyWeapon.SlowMovement();
+
+            Console.WriteLine("----------------------------------------------------------------------------------------");
         }
     }
 }
